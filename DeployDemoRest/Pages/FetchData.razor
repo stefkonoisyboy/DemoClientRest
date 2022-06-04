@@ -1,0 +1,35 @@
+﻿@page "/fetchdata/{id:int}"
+@inject HttpClient Http
+@inject IUsersDataService usersDataService
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+
+
+<Sample Id="Id"></Sample>
+
+@code {
+    private WeatherForecast[] forecasts;
+    private CurrentUserData currentUser = new CurrentUserData();
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+
+    [Parameter]
+    public int Id { get; set; }
+
+    public class WeatherForecast
+    {
+        public DateTime Date { get; set; }
+
+        public int TemperatureC { get; set; }
+
+        public string Summary { get; set; }
+
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+}
