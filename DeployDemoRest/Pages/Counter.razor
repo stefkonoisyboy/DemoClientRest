@@ -1,16 +1,59 @@
 ﻿@page "/counter"
 
-<h1>Counter</h1>
+@inject IUsersDataService usersDataService
+@inject IWeatherForecastService weatherForecastService
+@inject NavigationManager navManager
 
-<p>Current count: @currentCount</p>
+<h1>Hello, world!</h1>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<div class="alert alert-warning" role="alert">
+    Before authentication will function correctly, you must configure your provider details in <code>Program.cs</code>
+</div>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<button @onclick="Login">Login</button>
+
+@if (this.currentUser == null)
+{
+	<h1>Unauthorized</h1>
+}
+else
+{
+	<h1>@this.currentUser.Email</h1>
+}
+
+@foreach (var data in this.weatherData)
+{
+	<p>@data.Summary</p>
+}
 
 @code {
-    private int currentCount = 0;
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
+	private CurrentUserData currentUser = new CurrentUserData();
+	private IEnumerable<DeployDemoRest.Models.WeatherData> weatherData = new List<DeployDemoRest.Models.WeatherData>();
+	private int count = 0;
+
+	protected override async Task OnInitializedAsync()
+	{
+		this.currentUser = await this.usersDataService.GetCurrentUserDataAsync();
+		this.weatherData = await this.weatherForecastService.GetWeatherDataAsync();
+	}
+
+	async Task Login()
+	{
+		LoginInputData inputData = new LoginInputData
+		{
+			Email = "stefkp_coniovski@abv.bg",
+			Password = "Djokera03!",
+		};
+
+		this.currentUser = await this.usersDataService.LoginAsync(inputData);
+		this.count++;
+
+		this.StateHasChanged();
+		//this.navManager.NavigateTo($"/fetchdata/{this.currentUser.Id}");
+	}
 }

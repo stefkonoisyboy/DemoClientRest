@@ -1,26 +1,16 @@
-﻿@page "/fetchdata/{id:int}"
-@inject HttpClient Http
-@inject IUsersDataService usersDataService
+﻿@page "/fetchdata"
 
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 
-
-
-<Sample Id="Id"></Sample>
-
 @code {
     private WeatherForecast[] forecasts;
-    private CurrentUserData currentUser = new CurrentUserData();
 
     protected override async Task OnInitializedAsync()
     {
         
     }
-
-    [Parameter]
-    public int Id { get; set; }
 
     public class WeatherForecast
     {
